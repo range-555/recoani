@@ -7,6 +7,8 @@ authors = ["toshi <iskwts@gmail.com>"]
 [tool.poetry.dependencies]
 python = "^3.8"
 mysql-connector-python = "^8.0.24"
+invoke = "^1.5.0"
+beautifulsoup4 = "^4.9.3"
 
 [tool.poetry.dev-dependencies]
 
