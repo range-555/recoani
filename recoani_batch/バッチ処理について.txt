@@ -1,0 +1,62 @@
+①バッチの概要
+・collect_data
+アニメのデータを取得するバッチ。
+
+・calc
+doc2vec、お勧めアニメを計算するバッチ。
+
+
+②各コードについて
+・collect_data
+- 01_retrieve_anime_list_page_html_for_each_initial.py
+"あ"~"ん"まで頭文字別にアニメがまとめられたアニメ一覧ページのhtml取得
+- 02_extract_changes.py
+アニメ一覧ページから、変更情報(新規アニメ・配信終了アニメ・配信再開アニメ・配信中アニメ)をanimesに格納
+- 03_retrieve_anime_html.py
+新規アニメのhtmlを取得
+- 04_extract_anime_data.py
+htmlから各種データを取得
+- 05_extract_anime_cast.py
+htmlから声優のデータを取得
+- 06_extract_anime_staff.py
+htmlからスタッフのデータを取得
+- 07_extract_anime_other_information.py
+htmlからその他のデータを取得
+- 08_extract_anime_genre.py
+htmlからジャンルのデータを取得
+- 09_extract_related_anime.py
+htmlから関連アニメのデータを取得
+- 10_extract_outline_each_episode.py
+htmlから各話あらすじのデータを取得
+- 11_retrieve_ongoing_anime_html.py
+更新中アニメのhtmlを取得
+- 10_extract_outline_each_episode.py
+更新中アニメのhtmlから各話あらすじのデータを取得
+- 12_copy_title_to_title_full.py
+タイトルをfulltextカラムへコピー(サジェスト用)
+
+・calc
+- calc_docvec.py
+doc2vecを計算し格納
+- calc_recommend_list.py
+doc2vecの類似度から各アニメのお勧めアニメ上位33件を計算し格納
+
+
+③その他
+・crontabについて
+
+
+
+
+
+・DOCKERFILEのchromedriverについて
+RUN google-chrome --version | perl -pe 's/([^0-9]+)([0-9]+\.[0-9]+).+/$2/g' > chrome-version
+RUN pip install chromedriver-binary~=`cat chrome-version` && rm chrome-version
+
+perl -pe 's/[ \t]+$//'
+s/正規表現/置換文字列/ で $_ の値が置換。
+置換後の値が -p で自動的に出力。
+[e.x.]google chrome 80.1~~~ → 80.1
+
+
+・

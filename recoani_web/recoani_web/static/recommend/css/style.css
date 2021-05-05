@@ -1,0 +1,330 @@
+@charset "UTF-8";
+/***************
+UNIVERSAL
+***************/
+html {
+  color: white;
+  font-size: 62.5%;
+  font-weight: normal;
+  height: 100%; }
+
+body {
+  color: white;
+  font-family: 'Avenir', 'Helvetica Neue', 'Helvetica', 'Arial', 'Hiragino Sans', 'ヒラギノ角ゴシック', 'YuGothic', 'Yu Gothic', 'メイリオ', 'Meiryo', 'ＭＳ Ｐゴシック', 'MS PGothic';
+  height: 100%;
+  min-height: 100vh;
+  background: #64b4b4; }
+
+@media screen and (max-width: 767px) {
+  a {
+    font-size: 1rem; }
+
+  h1 {
+    font-size: 4rem; }
+
+  h2 {
+    font-size: 2rem; }
+
+  h3 {
+    font-size: 1.5rem; }
+
+  p {
+    font-size: 1.5rem;
+    margin-bottom: 0; }
+
+  span {
+    font-size: 1rem; }
+
+  table {
+    font-size: 1rem; } }
+@media screen and (min-width: 767px) {
+  a {
+    font-size: 2rem; }
+
+  h1 {
+    font-size: 8rem; }
+
+  h2 {
+    font-size: 4rem; }
+
+  h3 {
+    font-size: 2.5rem; }
+
+  p {
+    font-size: 2rem;
+    margin-bottom: 0; }
+
+  span {
+    font-size: 2rem; }
+
+  table {
+    font-size: 2rem; } }
+img {
+  height: auto;
+  max-width: 100%;
+  width: 100%; }
+
+ul {
+  list-style: none; }
+
+a {
+  text-decoration: none; }
+  a:hover {
+    text-decoration: none; }
+
+.main {
+  height: 100%;
+  position: relative; }
+
+/***************
+INDEX
+***************/
+.content__wrapper {
+  position: absolute;
+  top: 45%;
+  left: 50%;
+  transform: translateY(-50%) translateX(-50%);
+  width: 80%; }
+.content__title {
+  display: block;
+  font-size: 3.75rem;
+  font-weight: bold;
+  text-align: center;
+  padding-bottom: 50px; }
+.content__description {
+  display: block;
+  line-height: 5vh;
+  text-align: center; }
+
+.input-form {
+  display: flex;
+  justify-content: center;
+  flex-direction: column; }
+  .input-form__wrapper {
+    margin-top: 10vh;
+    text-align: center;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    position: relative;
+    flex-direction: column; }
+    .input-form__wrapper ul.messages {
+      padding-inline-start: 0; }
+  .input-form__title {
+    border: 0.5px solid rgba(225, 225, 225, 0.5);
+    color: black;
+    font-size: calc(4px + 1.25vw);
+    height: 40px;
+    margin: 0 auto;
+    padding: 0 35px;
+    text-align: center;
+    width: 80%;
+    max-width: 400px; }
+    .input-form__title::placeholder {
+      color: black;
+      opacity: 0.3;
+      text-align: center; }
+  .input-form__count {
+    border: 0.5px solid rgba(225, 225, 225, 0.5);
+    color: black;
+    font-size: calc(2px + 0.5vw);
+    height: 30px;
+    margin: 0 auto;
+    margin-top: 40px;
+    padding: 0 5px;
+    text-align: center;
+    width: 100%;
+    max-width: 150px; }
+  .input-form__submit-btn {
+    width: 40px;
+    margin: 50px auto;
+    margin-top: 10vh;
+    display: block;
+    font-size: 15px;
+    width: 200px;
+    height: 50px;
+    line-height: 30px;
+    color: whitesmoke;
+    text-decoration: none;
+    text-align: center;
+    background-color: #64b4b4;
+    border-radius: 5px;
+    border-color: white;
+    transition: all 0.4s; }
+    .input-form__submit-btn:hover {
+      background-color: #f9c500; }
+
+/***************
+OUTPUT
+***************/
+.result__wrapper {
+  width: 80%;
+  margin: 0 auto; }
+.result__title {
+  text-align: center;
+  margin: 5vh 0; }
+.result__cards {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center; }
+.result__card {
+  background-color: white;
+  display: flex;
+  flex-direction: row;
+  height: 80px;
+  justify-content: center;
+  align-items: center;
+  color: black;
+  width: 80%;
+  margin: 5px auto;
+  text-align: center; }
+  @media screen and (max-width: 767px) {
+    .result__card {
+      width: 100%; } }
+  .result__card__rank {
+    width: 10%;
+    font-size: 2.5rem; }
+    @media screen and (max-width: 767px) {
+      .result__card__rank {
+        font-size: 1.25rem; } }
+  .result__card__similarity {
+    width: 10%;
+    font-size: 2.5rem; }
+    @media screen and (max-width: 767px) {
+      .result__card__similarity {
+        font-size: 1.25rem; } }
+  .result__card__modal-link {
+    width: 70%;
+    font-size: 2rem;
+    color: black;
+    padding: 10px 0; }
+    @media screen and (max-width: 767px) {
+      .result__card__modal-link {
+        font-size: 1.25rem; } }
+    .result__card__modal-link:hover {
+      background-color: #2ecc71;
+      color: white;
+      transition: background-color 0.5s; }
+  .result__card-top {
+    background-color: white;
+    display: flex;
+    flex-direction: row;
+    height: 50px;
+    justify-content: center;
+    align-items: center;
+    color: black;
+    width: 80%;
+    margin: 5px auto;
+    text-align: center; }
+    @media screen and (max-width: 767px) {
+      .result__card-top {
+        width: 100%; } }
+    .result__card-top p {
+      font-size: 1.75rem; }
+      @media screen and (max-width: 767px) {
+        .result__card-top p {
+          font-size: 1rem; } }
+  .result__card__rank-top {
+    width: 10%; }
+  .result__card__similarity-top {
+    width: 10%; }
+  .result__card__modal-link-top {
+    width: 70%; }
+  .result__card.empty {
+    height: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    margin-top: 0;
+    margin-bottom: 0; }
+
+.modal {
+  display: none;
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  width: 100%; }
+  .modal__bg {
+    background: rgba(0, 0, 0, 0.7);
+    height: 100vh;
+    position: absolute;
+    width: 100%; }
+  .modal__area {
+    background: white;
+    left: 50%;
+    padding: 30px;
+    position: absolute;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 80%;
+    height: 90%;
+    overflow-y: scroll;
+    display: flex;
+    flex-direction: column; }
+    @media screen and (min-width: 767px) {
+      .modal__area .link-part {
+        display: flex;
+        flex-direction: row; } }
+  .modal__btn {
+    display: flex;
+    font-size: 15px;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto;
+    margin-top: 5vh;
+    width: 200px;
+    height: 50px;
+    line-height: 30px;
+    color: whitesmoke;
+    text-align: center;
+    background-color: #64b4b4;
+    border-color: white;
+    transition: all 0.4s; }
+    .modal__btn:hover {
+      background-color: #f9c500; }
+
+.anime__title-and-img {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  margin: 0 auto;
+  width: 100%; }
+.anime__title {
+  background-color: #c2edff;
+  border-top: solid 3px #364e96;
+  border-bottom: solid 3px #364e96;
+  color: black;
+  font-size: calc(8px + 1.5vw);
+  padding: 0.5em;
+  text-align: center;
+  width: 100%; }
+.anime__outline {
+  background-color: ivory;
+  color: black;
+  margin-top: 5vh; }
+  .anime__outline i {
+    opacity: 0.5; }
+  .anime__outline .fa-quote-right {
+    display: block;
+    text-align: right; }
+  .anime__outline blockquote {
+    opacity: 0.8; }
+  .anime__outline__quote {
+    text-align: right; }
+.anime__img {
+  margin-top: 30px; }
+  @media screen and (min-width: 767px) {
+    .anime__img {
+      width: 50%; } }
+
+.footer {
+  margin: 0 auto;
+  margin-left: 50px;
+  position: absolute;
+  top: 92.5%; }
+  .footer .copywriter {
+    font-size: 1.5rem; }
+
+/*# sourceMappingURL=style.css.map */

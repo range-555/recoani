@@ -1,0 +1,17 @@
+set -e
+# 新規アニメ情報取得
+python 01_retrieve_anime_list_page_html_for_each_initial.py
+python 02_extract_changes.py
+python 03_retrieve_anime_html.py
+python 04_extract_anime_data.py
+python 05_extract_anime_cast.py
+python 06_extract_anime_staff.py
+python 07_extract_anime_other_information.py
+python 08_extract_anime_genre.py
+python 09_extract_related_anime.py
+python 10_extract_outline_each_episode.py
+# 更新中アニメのあらすじ取得
+python 11_retrieve_ongoing_anime_html.py
+python 10_extract_outline_each_episode.py
+python 12_copy_title_to_title_full.py
+exit 0

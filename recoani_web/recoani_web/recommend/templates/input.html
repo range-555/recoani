@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}input{% endblock title %}
+
+{% block content %}
+
+<main class="main">
+  <div class="content__wrapper">
+    <span class="content__title">
+      Anime Reccomend
+    </span>
+    <span class="content__description">
+      あなたの好きなアニメから、<br>
+      お勧めアニメを自動生成します
+    </span>
+    <div class="input-form__wrapper">
+      {% if messages %}
+      <ul class="messages">
+        {% for message in messages %}
+        <li{% if message.tags %} class="{{ message.tags }}" {% endif %}>{{ message }}</li>
+          {% endfor %}
+      </ul>
+      {% endif %}
+      <form action="{% url 'recommend:result' %}" method="POST" enctype="multipart/form-data" class="input-form">
+        {% csrf_token %}
+        <input type="text" placeholder="アニメタイトル" name="term" class="input-form__title" id="anime-autocomplete-input">
+        <input type="text" name="count" list="counts" placeholder="おすすめ件数(1~30)" autocomplete="off"
+          class="input-form__count">
+        <datalist id="counts">
+          <option value=5>
+            　
+          <option value=10>
+            　
+          <option value=20>
+        </datalist>
+        <button type="submit" class="input-form__submit-btn" name='action' value="save">検索</button>
+      </form>
+    </div>
+  </div>
+  <div class="footer">
+    <p class="copywriter">© 2020 @range_555,@Tetsuyu02</p>
+  </div>
+</main>
+
+{% endblock %}

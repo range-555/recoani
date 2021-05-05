@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}result{% endblock title %}
+
+{% block content %}
+
+<div class="result__wrapper">
+  <h2 class=result__title>あなたにおすすめのアニメ</h2>
+
+  <div class="result__cards">
+    <div class="result__card-top">
+      <p class="result__card__rank-top">順位</p>
+      <p class="result__card__similarity-top">一致度</p>
+      <p class="result__card__modal-link-top">タイトル</p>
+    </div>
+    {% for item in list %}
+    <div class="result__card">
+      <p class="result__card__rank"> {{ item.rank }}位 </p>
+      <p class="result__card__similarity"> {{ item.similarity|floatformat:2 }} </p>
+      <a class="result__card__modal-link" href="" data-target="modal{{ item.rank }}">
+        {{ item.title }}
+      </a>
+    </div>
+
+    <div class="modal" id="modal{{ item.rank }}">
+      <div class="modal__bg modal__close">
+      </div>
+      <div class="modal__area">
+        <div class="anime__title-and-img">
+          <span class="anime__title">
+            {{ item.title }}
+          </span>
+        </div>
+        <span class="anime__outline">
+          <p class="anime__outline__title">[あらすじ]</p>
+          <blockquote class="anime__outline__main"><i class="fas fa-quote-left"></i><br>
+            {{ item.outline }}
+            <br><i class="fas fa-quote-right"></i></blockquote>
+          <p class="anime__outline__quote">dアニメストア公式サイトより</p>
+        </span>
+        <div class="link-part">
+          <a class="modal__close modal__btn" href="">閉じる</a>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+  <form action="{% url 'recommend:input' %}" method="POST" enctype="multipart/form-data">{% csrf_token %}
+    <button type="submit" class="input-form__submit-btn" name='action' value="save">入力画面に戻る</button>
+  </form>
+</div>
+
+{% endblock %}
