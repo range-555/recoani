@@ -12,11 +12,11 @@ from sklearn.decomposition import TruncatedSVD
 from sklearn.metrics.pairwise import cosine_similarity
 
 connection = mydb.connect(
-    host = "localhost",
-    port = 3306,
-    user = "root",
-    password = "root",
-    database = "recoani"
+    host = os.environ.get('recoani_host'),
+    port = os.environ.get('recoani_port'),
+    user = os.environ.get('recoani_user'),
+    password = os.environ.get('recoani_pass'),
+    database = os.environ.get('recoani_db')
 )
 
 # Tools
