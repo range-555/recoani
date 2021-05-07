@@ -68,7 +68,10 @@ while True:
     
     # jsonから各話あらすじを取得
     for target in targets:
-      json_data = json.loads(get_text(target), strict=False)
+      target = get_text(target)
+      if target is None or target == "":
+        continue
+      json_data = json.loads(target, strict=False)
       
       # あらすじ取得
       outline = ""
