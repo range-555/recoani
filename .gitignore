@@ -1,8 +1,4 @@
 .env
-docker-compose.yml
-nginx/
-wsgi.py
-settings.py
 .sass-cache
 
 # Created by https://www.gitignore.io/api/django
