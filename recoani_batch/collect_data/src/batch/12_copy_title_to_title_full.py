@@ -12,6 +12,7 @@ connection = mydb.connect(
 cursor = connection.cursor()
 
 cursor.execute("UPDATE animes SET title_full = title")
+connection.commit()
 
 print("12完了\n")
 
