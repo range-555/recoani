@@ -1,37 +1,32 @@
-import urllib.request as req
-from urllib import parse
 from bs4 import BeautifulSoup
 from time import sleep
 import mysql.connector as mydb
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
-from selenium.common.exceptions import TimeoutException
-import chromedriver_binary 
 import os
 
 connection = mydb.connect(
-    host = os.environ.get('recoani_host'),
-    port = os.environ.get('recoani_port'),
-    user = os.environ.get('recoani_user'),
-    password = os.environ.get('recoani_pass'),
-    database = os.environ.get('recoani_db')
+    host=os.environ.get('recoani_host'),
+    port=os.environ.get('recoani_port'),
+    user=os.environ.get('recoani_user'),
+    password=os.environ.get('recoani_pass'),
+    database=os.environ.get('recoani_db')
 )
 
 cursor = connection.cursor()
 
+
 def scroll_to_bottom(driver):
-  html_tmp_1 = driver.page_source
-  while True:
-    driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
-    sleep(2)
-    html_tmp_2 = driver.page_source
-    if html_tmp_1 != html_tmp_2:
-      html_tmp_1 = html_tmp_2
-    else:
-      return driver
+    html_tmp_1 = driver.page_source
+    while True:
+        driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
+        sleep(2)
+        html_tmp_2 = driver.page_source
+        if html_tmp_1 != html_tmp_2:
+            html_tmp_1 = html_tmp_2
+        else:
+            return driver
+
 
 def register_to_tmp_table(work_id, is_ongoing):
     try:
@@ -45,6 +40,7 @@ def register_to_tmp_table(work_id, is_ongoing):
     except Exception as e:
         connection.rollback()
         raise e
+
 
 def update_animes(html, work_id, is_ongoing):
     try:
@@ -62,6 +58,7 @@ def update_animes(html, work_id, is_ongoing):
         raise e
 
 # main
+
 
 # retrieveで取得したデータ用一時テーブル
 cursor.execute("CREATE TEMPORARY TABLE tmp_table (work_id INT, is_ongoing INT)")
@@ -83,7 +80,7 @@ target_url = "https://anime.dmkt-sp.jp/animestore/tp_pc"
 
 sleep(1)
 driver.get(target_url)
-driver.set_window_size(1000,2000)
+driver.set_window_size(1000, 2000)
 driver.find_element_by_css_selector(".tvnewlink").click()
 
 driver = scroll_to_bottom(driver)
@@ -94,12 +91,12 @@ target_page_soup = BeautifulSoup(html, "html.parser")
 new_contents = target_page_soup.select_one("#newContents")
 new_contents = new_contents.select(".itemModule")
 for new_content in new_contents:
-  register_to_tmp_table(new_content["data-workid"], 2)
+    register_to_tmp_table(new_content["data-workid"], 2)
 
 keep_contents = target_page_soup.select_one("#keepContents")
 keep_contents = keep_contents.select(".itemModule")
 for keep_content in keep_contents:
-  register_to_tmp_table(keep_content["data-workid"], 1)
+    register_to_tmp_table(keep_content["data-workid"], 1)
 
 print("更新終了")
 # 更新終了アニメ status:7 is_ongoing:0
@@ -113,15 +110,15 @@ cursor.execute("""
 
 anime_end_update_list = cursor.fetchall()
 for anime_end_update in anime_end_update_list:
-  work_id = anime_end_update[0]
-  sleep(1)
-  driver = webdriver.Chrome(options=options)
-  target_url = "https://anime.dmkt-sp.jp/animestore/ci_pc?workId=" + str(work_id)
-  driver.get(target_url)
-  scroll_to_bottom(driver)
-  html = driver.page_source
-  update_animes(html, work_id, 0)
-  driver.close()
+    work_id = anime_end_update[0]
+    sleep(1)
+    driver = webdriver.Chrome(options=options)
+    target_url = "https://anime.dmkt-sp.jp/animestore/ci_pc?workId=" + str(work_id)
+    driver.get(target_url)
+    scroll_to_bottom(driver)
+    html = driver.page_source
+    update_animes(html, work_id, 0)
+    driver.close()
 
 print("今期")
 # 今期アニメ status:7 is_ongoing:2
@@ -132,15 +129,15 @@ cursor.execute("""
 
 anime_now_content_list = cursor.fetchall()
 for anime_now_content in anime_now_content_list:
-  work_id = anime_now_content[0]
-  sleep(1)
-  driver = webdriver.Chrome(options=options)
-  target_url = "https://anime.dmkt-sp.jp/animestore/ci_pc?workId=" + str(work_id)
-  driver.get(target_url)
-  scroll_to_bottom(driver)
-  html = driver.page_source
-  update_animes(html, work_id, 2)
-  driver.close()
+    work_id = anime_now_content[0]
+    sleep(1)
+    driver = webdriver.Chrome(options=options)
+    target_url = "https://anime.dmkt-sp.jp/animestore/ci_pc?workId=" + str(work_id)
+    driver.get(target_url)
+    scroll_to_bottom(driver)
+    html = driver.page_source
+    update_animes(html, work_id, 2)
+    driver.close()
 
 print("継続")
 # 継続アニメ status:7 is_ongoing:1
@@ -151,15 +148,15 @@ cursor.execute("""
 
 anime_keep_content_list = cursor.fetchall()
 for anime_keep_content in anime_keep_content_list:
-  work_id = anime_keep_content[0]
-  sleep(1)
-  driver = webdriver.Chrome(options=options)
-  target_url = "https://anime.dmkt-sp.jp/animestore/ci_pc?workId=" + str(work_id)  
-  driver.get(target_url)
-  scroll_to_bottom(driver)
-  html = driver.page_source
-  update_animes(html, work_id, 1)
-  driver.close()
+    work_id = anime_keep_content[0]
+    sleep(1)
+    driver = webdriver.Chrome(options=options)
+    target_url = "https://anime.dmkt-sp.jp/animestore/ci_pc?workId=" + str(work_id)
+    driver.get(target_url)
+    scroll_to_bottom(driver)
+    html = driver.page_source
+    update_animes(html, work_id, 1)
+    driver.close()
 
 print("11完了\n")
 

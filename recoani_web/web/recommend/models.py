@@ -74,6 +74,7 @@ class Animes(models.Model):
     status = models.IntegerField(blank=True, null=True)
     created_at = models.DateTimeField(blank=True, null=True)
     updated_at = models.DateTimeField()
+
     def __str__(self):
         return self.title
 
@@ -149,4 +150,3 @@ class Staffs(models.Model):
     class Meta:
         managed = False
         db_table = 'staffs'
-

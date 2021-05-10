@@ -114,7 +114,7 @@ print(BASE_DIR)
 STATIC_URL = '/static/'
 
 STATICFILES_DIRS = [
-        os.path.join(BASE_DIR, 'recommend', 'static')
-        ]
+    os.path.join(BASE_DIR, 'recommend', 'static')
+]
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
