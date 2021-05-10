@@ -1,6 +1,6 @@
 from invoke import task
 
-task_list = [
+file_list = [
     "01_retrieve_anime_list_page_html_for_each_initial.py",
     "02_extract_changes.py",
     "03_retrieve_anime_html.py",
@@ -16,7 +16,8 @@ task_list = [
     "12_copy_title_to_title_full.py"
 ]
 
+
 @task
 def collect(c):
-    for task in task_list:
-        c.run(f"python3 ./batch/{task}")
+    for f in file_list:
+        c.run(f"python3 ./batch/{f}")

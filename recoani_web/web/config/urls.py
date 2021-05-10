@@ -1,6 +1,6 @@
 from django.contrib import admin
-from django.urls import path,include
+from django.urls import path, include
 
 urlpatterns = [
-    path('',include('recommend.urls'))
+    path('', include('recommend.urls'))
 ]
