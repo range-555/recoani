@@ -1,3 +1,4 @@
-beautifulsoup4==4.8.2
-mysql-connector-python==8.0.19
-pylint==2.4.4
+beautifulsoup4==4.9.3
+mysql-connector-python==8.0.24
+invoke==1.5.0
+selenium==3.141.0
