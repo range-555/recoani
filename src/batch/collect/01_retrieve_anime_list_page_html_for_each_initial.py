@@ -1,5 +1,6 @@
 from urllib import parse
 from time import sleep
+from ..db.DBConnection import DBConnection
 import mysql.connector as mydb
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options

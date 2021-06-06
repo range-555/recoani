@@ -1,4 +1,4 @@
 [flake8]
-# F401はchrome_binaryのimport・DjangoPJのファイル中のimport
+# F401除外はchrome_binaryのimport・DjangoPJのファイル中のimport
 # などのためなので、F401チェック自体はするべき
 ignore=E501, F401
