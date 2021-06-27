@@ -23,22 +23,16 @@ class DBConnection:
             print("[Error] ", e)
             raise
 
-    # SELECTクエリの実行
-    def execute_select_query(self, sql, params=None):
+    # クエリの実行
+    def execute_query(self, sql, params=None):
         try:
-            self.cursor.execute(sql, params=params)
+            self.cursor.execute(sql, params)
+            if not sql.startswith("SELECT"):
+                self.connection.commit()
         except mydb.Error as e:
             print("[SQL Excecution Error] ", e)
-            raise
-
-    # SELECT以外のクエリの実行
-    def execute_query(self, sql, params):
-        try:
-            self.cursor.execute(sql, params=params)
-            self.connection.commit()
-        except mydb.Error as e:
-            print("[SQL Excecution Error] ", e)
-            self.connection.rollback()
+            if not sql.startswith("SELECT"):
+                self.connection.rollback()
             raise
 
     # DB接続終了
