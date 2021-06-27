@@ -1,6 +1,6 @@
 import mysql.connector as mydb
 import os
-from DBCommand import DBCommand
+from .DBCommand import DBCommand
 
 
 class DBConnection:
@@ -23,21 +23,29 @@ class DBConnection:
             print("[Error] ", e)
             raise
 
-    # クエリの実行
-    def excecute_query(self, sql, params):
+    # SELECTクエリの実行
+    def execute_select_query(self, sql, params=None):
         try:
             self.cursor.execute(sql, params=params)
-            self.conn.commit()
         except mydb.Error as e:
             print("[SQL Excecution Error] ", e)
-            self.conn.rollback()
+            raise
+
+    # SELECT以外のクエリの実行
+    def execute_query(self, sql, params=None):
+        try:
+            self.cursor.execute(sql, params=params)
+            self.connection.commit()
+        except mydb.Error as e:
+            print("[SQL Excecution Error] ", e)
+            self.connection.rollback()
             raise
 
     # DB接続終了
     def __del__(self):
         try:
             self.cursor.close()
-            self.conn.close()
+            self.connection.close()
             print("Conncection Delete!!")
         except mydb.errors.ProgrammingError as e:
             print(e)
