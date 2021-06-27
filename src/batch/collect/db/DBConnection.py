@@ -32,7 +32,7 @@ class DBConnection:
             raise
 
     # SELECT以外のクエリの実行
-    def execute_query(self, sql, params=None):
+    def execute_query(self, sql, params):
         try:
             self.cursor.execute(sql, params=params)
             self.connection.commit()
