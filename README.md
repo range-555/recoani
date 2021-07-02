@@ -53,6 +53,11 @@ GCEからRDSへはautosshでEC2を踏み台にポートフォワードで接続�
 Route53でドメインの名前解決をしています。
 <br>無料枠に収めるためにこのような構成になりましたが、基本的にAWSかGCPのどちらかのみで立てることが望ましいと実感しました。
 
+### CMD
+docker run -p 8080:8080 --env-file=./docker/collect/.env collect
+
+docker build -t collect -f ./docker/collect/Dockerfile .
+
 
 ### 課題
 - フリーワード検索
