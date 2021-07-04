@@ -1,23 +1,18 @@
+import chromedriver_binary
+import mysql.connector as mydb
+import os
 from urllib import parse
 from time import sleep
-from ..db.DBConnection import DBConnection
-import mysql.connector as mydb
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import TimeoutException
-import os
 
-connection = mydb.connect(
-    host=os.environ.get('recoani_host'),
-    port=os.environ.get('recoani_port'),
-    user=os.environ.get('recoani_user'),
-    password=os.environ.get('recoani_pass'),
-    database=os.environ.get('recoani_db')
-)
+from src.common.db.DBConnection import DBConnection
 
-cursor = connection.cursor()
+
+connection = DBConnection()
 
 
 def scroll_to_bottom(driver):
@@ -30,23 +25,6 @@ def scroll_to_bottom(driver):
             html_tmp_1 = html_tmp_2
         else:
             return driver
-
-# initialが存在しない場合INSERT、存在した場合UPDATE
-
-
-def update_anime_list_pages(initial, html):
-    try:
-        query = """
-        INSERT INTO anime_list_pages
-        (initial, html)
-        VALUES (%(initial)s, %(html)s)
-        ON DUPLICATE KEY UPDATE
-        html = %(html)s
-        """
-        cursor.execute(query, {'initial': initial, 'html': html})
-        connection.commit()
-    except Exception:
-        connection.rollback()
 
 
 def update_target_url(update_dict):
@@ -91,7 +69,8 @@ for page in range(10):
         driver = scroll_to_bottom(driver)
         initial = li.find_element_by_css_selector("a").text
         html = driver.page_source
-        update_anime_list_pages(initial, html)
+        # initialが存在しない場合INSERT、存在した場合UPDATE
+        connection.execute_query("insert_into_anime_list_pages_html", {"initial": initial, "html": html})
         print(initial)
 
 print("01完了\n")
@@ -99,5 +78,4 @@ print("01完了\n")
 driver.close()
 driver.quit()
 
-cursor.close()
-connection.close()
+del connection

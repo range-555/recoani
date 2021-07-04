@@ -1,18 +1,14 @@
-from time import sleep
+import chromedriver_binary
 import mysql.connector as mydb
+import os
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
-import os
+from time import sleep
 
-connection = mydb.connect(
-    host=os.environ.get('recoani_host'),
-    port=os.environ.get('recoani_port'),
-    user=os.environ.get('recoani_user'),
-    password=os.environ.get('recoani_pass'),
-    database=os.environ.get('recoani_db')
-)
+from src.common.db.DBConnection import DBConnection
 
-cursor = connection.cursor()
+
+connection = DBConnection()
 
 
 def scroll_to_bottom(driver):
@@ -25,20 +21,6 @@ def scroll_to_bottom(driver):
             html_tmp_1 = html_tmp_2
         else:
             return driver
-
-
-def register_to_animes(id, html):
-    try:
-        query = """
-        UPDATE animes
-        SET html = %(html)s,
-        status = 1
-        where id = %(id)s
-        """
-        cursor.execute(query, {'id': id, 'html': html})
-        connection.commit()
-    except Exception:
-        connection.rollback()
 
 
 # main
@@ -55,8 +37,8 @@ options.add_argument("disable-infobars")
 
 driver = webdriver.Chrome(options=options)
 
-cursor.execute("SELECT id,url,status FROM animes")
-animes = cursor.fetchall()
+connection.cursor.execute("SELECT id,url,status FROM animes")
+animes = connection.cursor.fetchall()
 
 for anime in animes:
     if anime[2] >= 1:
@@ -65,10 +47,9 @@ for anime in animes:
     driver.get(anime[1])
     driver = scroll_to_bottom(driver)
     html = driver.page_source
-    register_to_animes(anime[0], html)
+    connection.execute_query("update_animes_html", {"id": anime[0], "html": html})
     print(anime[0])
 
 print("03完了\n")
 
-cursor.close()
-connection.close()
+del connection
