@@ -1,4 +1,4 @@
-FROM python:3.8-slim
+FROM python:3.9-slim
 ENV PYTHONUNBUFFERED 1
 WORKDIR /workspace
 
@@ -13,8 +13,8 @@ RUN pip install chromedriver-binary~=`cat chrome-version` && rm chrome-version
 
 RUN apt-get install -y fonts-ipafont-gothic --no-install-recommends
 
-COPY requirements.txt /workspace/
-COPY ./src/ /workspace/
+COPY ./docker/collect/requirements.txt /workspace/
+COPY ./src/batch/collect /workspace/
 RUN pip install -r requirements.txt
 
 RUN useradd -m recoani
