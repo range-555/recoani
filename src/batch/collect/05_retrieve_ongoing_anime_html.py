@@ -43,10 +43,6 @@ def main():
     del connection
 
 
-if __name__ == "__main__":
-    main()
-
-
 def _register_contents_to_tmp_table(soup, css_id, is_ongoing, connection):
     contents = soup.select_one(css_id)
     contents = contents.select(".itemModule")
@@ -67,3 +63,7 @@ def _update_ongoing_anime_html(query_name, is_ongiong, crawler, connection):
         html = crawler.driver.page_source
         connection.execute_query("update_animes_html_is_ongoing",
                                  {'html': html, 'work_id': work_id, 'is_ongoing': is_ongiong})
+
+
+if __name__ == "__main__":
+    main()
