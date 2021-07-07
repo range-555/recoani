@@ -206,6 +206,16 @@ query = {
         SELECT work_id FROM tmp_table
         )
         """,
+    "select_work_id_from_tmp_table_is_ongoing_2":
+        """
+        SELECT work_id FROM tmp_table
+        WHERE is_ongoing = 2
+        """,
+    "select_work_id_from_tmp_table_is_ongoing_1":
+        """
+        SELECT work_id FROM tmp_table
+        WHERE is_ongoing = 1
+        """,
     "update_animes_html_and_is_ongoing":
         """
         UPDATE animes
