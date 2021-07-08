@@ -12,7 +12,21 @@ from src.batch.calc.mytokenize import mytokenize
 
 
 def main():
-    connection = DBConnection(1)
+    connection = DBConnection(1)  # 1を指定するとdictionary=Trueに設定される
+    connection.cursor.execute("SELECT id, title, outline_entire FROM animes")
+    animes = connection.cursor.fetchall()
+
+    # あらすじ+タイトル*4の文字列を単語で分割
+    for item in animes:
+        item['tokens'] = mytokenize(item['outline_entire'], item['title'])
+
+    # 類似度算出に使用する単語のリストを生成
+    get_word = _create_get_word(animes)
+
+    # tfidfで計算するためにデータ整形
+    items = _arrange_data(animes, get_word)
+
+    # itemsからdocument-term matrixを生成
     tfidf = TfidfVectorizer(
         max_df=0.5,
         min_df=1,
@@ -20,27 +34,13 @@ def main():
         analyzer='word',
         ngram_range=(1, 1)
     )
-
-    connection.cursor.execute("SELECT id, title, outline_entire FROM animes")
-    animes = connection.cursor.fetchall()
-
-    for item in animes:
-        item['tokens'] = mytokenize(item['outline_entire'], item['title'])
-
-    get_word = _create_get_word(animes)
-
-    items = _arrange_data(animes, get_word)
-
-    # fit_transform?
-    # https://stackoverflow.com/questions/53027864/what-is-the-difference-between-tfidfvectorizer-fit-transfrom-and-tfidf-transform
-    # tfidf_fit = tfidf.fit(items['outline'])
-    # tfidf_transform = tfidf.transform(items['outline'])
     tfidf_transform = tfidf.fit_transform(items['outline'])
 
+    # document-term matrixからタイトル間の類似度を算出
     cos_sim = cosine_similarity(tfidf_transform, tfidf_transform)
 
+    # 各アニメタイトルに対し、類似度の高いタイトルをDBに格納
     for item in animes:
-        print(item['title'])
         _update_recommend_list(item, items, cos_sim, connection)
 
     print("calc 完了\n")
@@ -64,10 +64,12 @@ def _arrange_data(animes, get_word):
 
 
 def _create_get_word(animes):
+    # 分割した単語で単語のリストを作成し、多い順にソート
     vocab_list = _create_vocab_list(animes)
     vocab_list = sorted(vocab_list, reverse=True)
-    vocab_list = [v for v in vocab_list if not ("助詞" in v[2] or "記号" in v[2] or "助動詞" in v[2] or "接続詞" in v[2])]
-
+    # 助詞、記号、助動詞、接続詞は対象外
+    vocab_list = _exclude_unnecessary_word(vocab_list)
+    # stop_word -> 除去する単語
     stop_word = _stop_word_list()
     stop_word_regex = [re.compile("^[!?]+$")]
 
@@ -94,6 +96,10 @@ def _create_vocab_list(animes):
         vocab_list.append((v["count"], k, v["pos"]))
 
     return vocab_list
+
+
+def _exclude_unnecessary_word(vocab_list):
+    return [v for v in vocab_list if not ("助詞" in v[2] or "記号" in v[2] or "助動詞" in v[2] or "接続詞" in v[2])]
 
 
 def _is_stop(vocab, stop_word, stop_word_regex):
@@ -129,7 +135,6 @@ def _update_recommend_list(item, items, cos_sim, connection):
         recommend_list.append(recommend_elm)
         rank += 1
     recommend_list = json.dumps(recommend_list)
-    print(recommend_list)
     connection.execute_query("update_animes_recommend_list", {'id': id, 'recommend_list': recommend_list})
 
 
