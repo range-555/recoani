@@ -129,7 +129,6 @@ CREATE TABLE `animes` (
   `title` varchar(255) DEFAULT NULL,
   `work_id` int DEFAULT NULL,
   `outline_entire` text,
-  `doc_vec` text,
   `recommend_list` text,
   `favorite` int DEFAULT NULL,
   `producted_year` varchar(255) DEFAULT NULL,

@@ -9,7 +9,7 @@ import os
 ################################################################
 query = {
     #############################
-    # 01
+    # collect 01
     #############################
     # anime_list_page
     "insert_into_anime_list_pages_html":
@@ -21,7 +21,7 @@ query = {
         html = %(html)s
         """,
     #############################
-    # 02
+    # collect 02
     #############################
     # tmp_tableにデータを挿入
     "insert_into_tmp_table_data":
@@ -79,7 +79,7 @@ query = {
         WHERE work_id = %(work_id)s
         """,
     #############################
-    # 03
+    # collect 03
     #############################
     "update_animes_html":
         """
@@ -89,7 +89,7 @@ query = {
         where id = %(id)s
         """,
     #############################
-    # 04
+    # collect 04
     #############################
     # animesのステータスを更新
     "update_animes_status":
@@ -196,7 +196,7 @@ query = {
         SET title_full = title
         """,
     #############################
-    # 05
+    # collect 05
     #############################
     "select_work_id_from_animes_end_update":
         """
@@ -229,12 +229,21 @@ query = {
         INSERT INTO tmp_table
         (work_id, is_ongoing)
         VALUES (%(work_id)s, %(is_ongoing)s)
+        """,
+    #############################
+    # calc
+    #############################
+    "update_animes_recommend_list":
+        """
+        UPDATE animes
+        SET recommend_list = %(recommend_list)s
+        WHERE id = %(id)s
         """
 }
 
 
 class DBConnection:
-    def __init__(self):
+    def __init__(self, is_calc=None):
         try:
             self.connection = mydb.connect(
                 host=os.environ.get('RECOANI_HOST'),
@@ -244,7 +253,10 @@ class DBConnection:
                 database=os.environ.get('RECOANI_DB')
             )
             self.connection.autocommit = False
-            self.cursor = self.connection.cursor()
+            if is_calc:
+                self.cursor = self.connection.cursor(buffered=True, dictionary=True)
+            else:
+                self.cursor = self.connection.cursor()
         except mydb.Error as e:
             print("[DBConnection Error] ", e)
             raise
