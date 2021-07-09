@@ -25,58 +25,27 @@ def main():
                 status = 2
             # cast
             if status == 2:
-                cast_ids = extract.cast_ids(soup)
-                for cast_id in cast_ids:
-                    # anime_castにinsert(アニメとキャストの紐付き)
-                    connection.execute_query("insert_into_anime_cast_data", {'anime_id': anime_id, 'cast_id': cast_id})
-                connection.execute_query("update_animes_status", {"status": 3, "anime_id": anime_id})
+                cast(anime_id, soup, connection)
                 status = 3
             # staff
             if status == 3:
-                staff_ids = extract.staff_ids(soup)
-                for staff_id in staff_ids:
-                    # anime_staffにinsert(アニメとスタッフの紐付き)
-                    connection.execute_query("insert_into_anime_staff_data", {'anime_id': anime_id, 'staff_id': staff_id})
-                connection.execute_query("update_animes_status", {"status": 4, "anime_id": anime_id})
+                staff(anime_id, soup, connection)
                 status = 4
             # other_information
             if status == 4:
-                other_information_ids = extract.other_information_ids(soup)
-                for other_information_id in other_information_ids:
-                    # anime_staffにinsert(アニメとスタッフの紐付き)
-                    connection.execute_query("insert_into_anime_other_information_data", {'anime_id': anime_id, 'other_information_id': other_information_id})
-                connection.execute_query("update_animes_status", {"status": 5, "anime_id": anime_id})
+                other_information(anime_id, soup, connection)
                 status = 5
             # genre
             if status == 5:
-                genre_cds = extract.genre_cds(soup)
-                for genre_cd in genre_cds:
-                    # anime_staffにinsert(アニメとスタッフの紐付き)
-                    connection.execute_query("insert_into_anime_genre_data", {'anime_id': anime_id, 'genre_cd': genre_cd})
-                connection.execute_query("update_animes_status", {"status": 5, "anime_id": anime_id})
+                genre(anime_id, soup, connection)
                 status = 6
             # related_anime
             if status == 6:
-                related_anime_ids = extract.related_anime_ids(soup)
-                for related_anime_id in related_anime_ids:
-                    # related_animesにinsert(関連アニメ)
-                    connection.execute_query("insert_into_related_animes_data", {'anime_id': anime_id, 'related_anime_id': related_anime_id})
-                connection.execute_query("update_animes_status", {"status": 7, "anime_id": anime_id})
+                related_animes(anime_id, soup, connection)
                 status = 7
             # outline_each_episode
             if status == 7:
-                outline_jsons = extract.outline_jsons(soup)
-                # idからwork_idを取得
-                connection.cursor.execute("SELECT work_id FROM animes WHERE id = %(anime_id)s LIMIT 1", {"anime_id": anime_id})
-                anime_work_id = connection.cursor.fetchone()
-                # 各話あらすじを取得
-                for outline_json in outline_jsons:
-                    params = extract.outline_params_from_json(outline_json, anime_work_id)
-                    if params is None:
-                        continue
-                    params["anime_id"] = anime_id
-                    connection.execute_query("insert_into_outline_each_episode_data", params)
-                connection.execute_query("update_animes_status", {"status": 8, "anime_id": anime_id})
+                outline_each_episode(anime_id, soup, connection)
                 status = 8
 
     # 全文検索用のカラムにタイトルをコピー
@@ -85,6 +54,61 @@ def main():
     print("04完了\n")
 
     del connection
+
+
+def cast(anime_id, soup, connection):
+    cast_ids = extract.cast_ids(soup)
+    for cast_id in cast_ids:
+        # anime_castにinsert(アニメとキャストの紐付き)
+        connection.execute_query("insert_into_anime_cast_data", {'anime_id': anime_id, 'cast_id': cast_id})
+    connection.execute_query("update_animes_status", {"status": 3, "anime_id": anime_id})
+
+
+def genre(anime_id, soup, connection):
+    genre_cds = extract.genre_cds(soup)
+    for genre_cd in genre_cds:
+        # anime_staffにinsert(アニメとスタッフの紐付き)
+        connection.execute_query("insert_into_anime_genre_data", {'anime_id': anime_id, 'genre_cd': genre_cd})
+    connection.execute_query("update_animes_status", {"status": 5, "anime_id": anime_id})
+
+
+def other_information(anime_id, soup, connection):
+    other_information_ids = extract.other_information_ids(soup)
+    for other_information_id in other_information_ids:
+        # anime_staffにinsert(アニメとスタッフの紐付き)
+        connection.execute_query("insert_into_anime_other_information_data", {'anime_id': anime_id, 'other_information_id': other_information_id})
+    connection.execute_query("update_animes_status", {"status": 5, "anime_id": anime_id})
+
+
+def outline_each_episode(anime_id, soup, connection):
+    outline_jsons = extract.outline_jsons(soup)
+    # idからwork_idを取得
+    connection.cursor.execute("SELECT work_id FROM animes WHERE id = %(anime_id)s LIMIT 1", {"anime_id": anime_id})
+    anime_work_id = connection.cursor.fetchone()
+    # 各話あらすじを取得
+    for outline_json in outline_jsons:
+        params = extract.outline_params_from_json(outline_json, anime_work_id)
+        if params is None:
+            continue
+        params["anime_id"] = anime_id
+        connection.execute_query("insert_into_outline_each_episode_data", params)
+    connection.execute_query("update_animes_status", {"status": 8, "anime_id": anime_id})
+
+
+def related_animes(anime_id, soup, connection):
+    related_anime_ids = extract.related_anime_ids(soup)
+    for related_anime_id in related_anime_ids:
+        # related_animesにinsert(関連アニメ)
+        connection.execute_query("insert_into_related_animes_data", {'anime_id': anime_id, 'related_anime_id': related_anime_id})
+    connection.execute_query("update_animes_status", {"status": 7, "anime_id": anime_id})
+
+
+def staff(anime_id, soup, connection):
+    staff_ids = extract.staff_ids(soup)
+    for staff_id in staff_ids:
+        # anime_staffにinsert(アニメとスタッフの紐付き)
+        connection.execute_query("insert_into_anime_staff_data", {'anime_id': anime_id, 'staff_id': staff_id})
+    connection.execute_query("update_animes_status", {"status": 4, "anime_id": anime_id})
 
 
 if __name__ == "__main__":
