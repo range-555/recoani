@@ -2,6 +2,7 @@ from bs4 import BeautifulSoup
 
 from src.common.crawl.crawler import Crawler
 from src.common.db.DBConnection import DBConnection
+from src.batch.collect.collect04_extract_data import outline_each_episode
 
 
 def main():
@@ -36,6 +37,9 @@ def main():
     query_name = "select_work_id_from_tmp_table_is_ongoing_1"
     _update_ongoing_anime_html(query_name, 1, crawler, connection)
     print("継続アニメ登録完了")
+
+    connection.cursor.exexute(" where status = 7")
+    outline_each_episode
 
     print("11完了\n")
 
