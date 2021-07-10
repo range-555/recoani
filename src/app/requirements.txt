@@ -1,4 +1,4 @@
-Django>=2.0,<3.0
+Django==3.2.4
 mysqlclient==2.0.3
 requests==2.25.1
 numpy==1.20.2

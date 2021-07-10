@@ -71,11 +71,11 @@ WSGI_APPLICATION = 'config.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': os.environ.get('recoani_db'),
-        'USER': os.environ.get('recoani_user'),
-        'PASSWORD': os.environ.get('recoani_pass'),
-        'HOST': os.environ.get('recoani_host'),
-        'PORT': os.environ.get('recoani_port'),
+        'NAME': os.environ.get('RECOANI_DB'),
+        'USER': os.environ.get('RECOANI_USER'),
+        'PASSWORD': os.environ.get('RECOANI_PASS'),
+        'HOST': os.environ.get('RECOANI_HOST'),
+        'PORT': os.environ.get('RECOANI_PORT'),
         'OPTIONS': {
             'charset': 'utf8mb4',
         },

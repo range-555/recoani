@@ -1,11 +1,10 @@
-FROM python:3.8
+FROM python:3
 ENV PYTHONUNBUFFERED 1
-RUN mkdir /workspace
 WORKDIR /workspace
 
-COPY requirements.txt /workspace/
+COPY ./src/app/requirements.txt /workspace/
 RUN pip install -r requirements.txt
-COPY ./web /workspace/
+COPY ./src/app/recoani /workspace/
 
 RUN useradd -m recoani
 USER recoani
