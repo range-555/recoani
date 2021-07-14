@@ -38,8 +38,12 @@ def main():
     _update_ongoing_anime_html(query_name, 1, crawler, connection)
     print("継続アニメ登録完了")
 
-    connection.cursor.exexute(" where status = 7")
-    outline_each_episode
+    # 更新されたアニメ群の各話エピソードを更新
+    connection.cursor.execute("select id, html from animes where status = 7")
+    animes = connection.cursor.fetchall()
+    for anime in animes:
+        soup = BeautifulSoup(anime[1], "html.parser")
+        outline_each_episode(anime[0], soup, connection)
 
     print("11完了\n")
 
@@ -65,7 +69,7 @@ def _update_ongoing_anime_html(query_name, is_ongiong, crawler, connection):
         crawler.get(target_url)
         crawler.scroll_to_bottom()
         html = crawler.driver.page_source
-        connection.execute_query("update_animes_html_is_ongoing",
+        connection.execute_query("update_animes_html_and_is_ongoing",
                                  {'html': html, 'work_id': work_id, 'is_ongoing': is_ongiong})
 
 

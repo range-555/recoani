@@ -170,8 +170,8 @@ query = {
     "insert_into_anime_genre_data":
         """
         INSERT INTO anime_genre
-        (anime_id, genre_id)
-        VALUES (%(anime_id)s, %(genre_id)s)
+        (anime_id, genre_cd)
+        VALUES (%(anime_id)s, %(genre_cd)s)
         """,
     # related_animesに紐付きを挿入
     "insert_into_related_animes_data":

@@ -51,7 +51,7 @@ def cast_ids(soup, connection):
         connection.execute_query("insert_into_casts_data_if_not_exist", {'tag_id': tag_id, 'cast_name': cast_name})
         connection.cursor.execute("SELECT id FROM casts WHERE tag_id = %(tag_id)s LIMIT 1", {"tag_id": tag_id})
         cast_id = connection.cursor.fetchone()
-        cast_ids.append(cast_id)
+        cast_ids.append(cast_id[0])
 
     return cast_ids
 
@@ -65,7 +65,7 @@ def genre_cds(soup, connection):
         connection.execute_query("insert_into_genres_data_if_not_exist", {'genre_cd': genre_cd, 'genre': genre_name})
         connection.cursor.execute("SELECT id FROM genres WHERE genre_cd = %(genre_cd)s LIMIT 1", {"genre_cd": genre_cd})
         genre_cd = connection.cursor.fetchone()
-        genre_cds.append(genre_cd)
+        genre_cds.append(genre_cd[0])
 
     return genre_cds
 
@@ -78,9 +78,9 @@ def other_information_ids(soup, connection):
         other_information_name = _get_text(other_information_tag.select_one("a"))
         # other_informationsに存在しなければinsert
         connection.execute_query("insert_into_other_informations_data_if_not_exist", {'tag_id': tag_id, 'other_information': other_information_name})
-        connection.execute_query("SELECT id FROM other_informations WHERE tag_id = %(tag_id)s LIMIT 1", {"tag_id": tag_id})
+        connection.cursor.execute("SELECT id FROM other_informations WHERE tag_id = %(tag_id)s LIMIT 1", {"tag_id": tag_id})
         other_information_id = connection.cursor.fetchone()
-        other_information_ids.append(other_information_id)
+        other_information_ids.append(other_information_id[0])
 
     return other_information_ids
 
@@ -131,7 +131,8 @@ def related_anime_ids(soup, connection):
         related_anime_work_id = _tag_id(related_anime_tag)
         connection.cursor.execute("SELECT id FROM animes WHERE work_id = %(related_anime_work_id)s LIMIT 1", {"related_anime_work_id": related_anime_work_id})
         related_anime_id = connection.cursor.fetchone()
-        related_anime_ids.append(related_anime_id)
+        if related_anime_id is not None:
+            related_anime_ids.append(related_anime_id[0])
 
     return related_anime_ids
 
@@ -146,7 +147,7 @@ def staff_ids(soup, connection):
         connection.execute_query("insert_into_staffs_data_if_not_exist", {'tag_id': tag_id, 'staff_name': staff_name})
         connection.cursor.execute("SELECT id FROM staffs WHERE tag_id = %(tag_id)s LIMIT 1", {"tag_id": tag_id})
         staff_id = connection.cursor.fetchone()
-        staff_ids.append(staff_id)
+        staff_ids.append(staff_id[0])
 
     return staff_ids
 

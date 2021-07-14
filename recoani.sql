@@ -46,14 +46,14 @@ DROP TABLE IF EXISTS `anime_genre`;
 CREATE TABLE `anime_genre` (
   `id` int NOT NULL AUTO_INCREMENT,
   `anime_id` int DEFAULT NULL,
-  `genre_id` int DEFAULT NULL,
+  `genre_cd` int DEFAULT NULL,
   `created_at` datetime DEFAULT CURRENT_TIMESTAMP,
   `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   KEY `fk_anime_id` (`anime_id`),
-  KEY `fk_genre_id` (`genre_id`),
+  KEY `fk_genre_cd` (`genre_cd`),
   CONSTRAINT `anime_genre_ibfk_1` FOREIGN KEY (`anime_id`) REFERENCES `animes` (`id`),
-  CONSTRAINT `anime_genre_ibfk_2` FOREIGN KEY (`genre_id`) REFERENCES `genres` (`id`)
+  CONSTRAINT `anime_genre_ibfk_2` FOREIGN KEY (`genre_cd`) REFERENCES `genres` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
