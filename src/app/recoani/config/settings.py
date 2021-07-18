@@ -75,7 +75,7 @@ DATABASES = {
         'USER': os.environ.get('RECOANI_USER'),
         'PASSWORD': os.environ.get('RECOANI_PASS'),
         'HOST': os.environ.get('RECOANI_HOST'),
-        'PORT': os.environ.get('RECOANI_PORT'),
+        'PORT': 3306,
         'OPTIONS': {
             'charset': 'utf8mb4',
         },
