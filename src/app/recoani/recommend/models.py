@@ -61,7 +61,6 @@ class Animes(models.Model):
     title_full = models.TextField(blank=True, null=True)
     work_id = models.IntegerField(blank=True, null=True)
     outline_entire = models.TextField(blank=True, null=True)
-    doc_vec = models.TextField(blank=True, null=True)
     recommend_list = models.TextField(blank=True, null=True)
     favorite = models.IntegerField(blank=True, null=True)
     producted_year = models.CharField(max_length=255, blank=True, null=True)

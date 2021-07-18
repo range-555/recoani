@@ -6,8 +6,8 @@ from recommend.models import Animes
 
 class TestView(TestCase):
     def setUp(self):
-        self.lion = Animes.objects.create(id=1, title="lion", outline_entire="lion!", recommend_list="2", doc_vec="1")
-        self.cat = Animes.objects.create(id=2, title="cat", outline_entire="cat!", recommend_list="1", doc_vec="1")
+        self.lion = Animes.objects.create(id=1, title="lion", outline_entire="lion!", recommend_list="2")
+        self.cat = Animes.objects.create(id=2, title="cat", outline_entire="cat!", recommend_list="1")
 
     def test_urlview(self):
         result = self.client.post(resolve_url('recommend:input'))
